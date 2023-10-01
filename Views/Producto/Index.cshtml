@@ -1,0 +1,33 @@
+﻿<!-- Se debe incluir la biblioteca para importr los iconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+@model List<Producto>  
+@{
+    ViewData["Title"] = "Lista de Productos";
+}
+<h1>@ViewData["Title"]</h1>
+<button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Create","Producto")'">Nuevo Producto</button>
+
+<p>Esta página muestra la Lista de Productos.</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Accion</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model){
+        <tr>
+            <td>@item.IdProducto</td>
+            <td>@item.Nombre</td>
+            <td>@item.Descripcion</td>
+            <td>@item.Cantidad</td>
+                <td><button type="button" class="btn btn-success"><i class="fa fa-pencil" aria-hidden="true"></i></button>&nbsp;<button type="button" class="btn btn-primary"><i class="fa fa-plus-square-o" aria-hidden="true"></i></button>&nbsp;<button type="button" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button></td>
+        </tr>
+        }           
+    </tbody>
+</table>    
