@@ -13,9 +13,14 @@ namespace InicioProyectoClasesCRUD.Controllers
         }
 
         // GET: ProductoController/Details/5
-        public IActionResult Details(int id)
+        public IActionResult Details(int IdProducto)
         {
-            return View();
+            Producto producto = Util.Utils.listaProductos.Find(x => x.IdProducto==IdProducto);
+            if (producto != null)
+            {
+                return View(producto);
+            }
+            return RedirectToAction("Index");
         }
 
         // GET: ProductoController/Create
@@ -48,8 +53,22 @@ namespace InicioProyectoClasesCRUD.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public ActionResult Edit(int IdProducto,string Nombre, string Descripcion, int Cantidad)
+        {
+            Producto producto = Util.Utils.listaProductos.Find(x => x.IdProducto==IdProducto);
+            if (producto != null)
+            {
+                producto.Nombre = Nombre;
+                producto.Cantidad = Cantidad;
+                producto.Descripcion = Descripcion;
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
+
         // POST: ProductoController/Edit/5
-        
+
 
         // GET: ProductoController/Delete/5
         public ActionResult Delete(int IdProducto)
