@@ -1,7 +1,13 @@
+using InicioProyectoClasesCRUD.Data;
+using System.Net.Http;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Agregar la clase ClientHttp
+builder.Services.AddSingleton<ClientHttp>();
 
 var app = builder.Build();
 

@@ -4,11 +4,12 @@ namespace InicioProyectoClasesCRUD.Models
 {
     public class Producto
     {
-        public int IdProducto { get; set; }
+        [Key]
+        public int idProducto { get; set; }
         [Required]
-        public string Nombre { get; set; }
-        public string Descripcion { get; set; }
+        public string nombre { get; set; }
+        public string descripcion { get; set; }
         [Required]
-        public int Cantidad { get; set; }
+        public int cantidad { get; set; }
     }
 }
