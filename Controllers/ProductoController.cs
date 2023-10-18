@@ -23,7 +23,7 @@ namespace InicioProyectoClasesCRUD.Controllers
         {
             using (var httpClient = _httpClientFactory.CreateHttpClient())
             {
-                var response = await httpClient.GetAsync("api/Producto");
+                var response = await httpClient.GetAsync("api/Producto");//verbo get porque retorna todo
                 // Procesa la respuesta correcta
                 if (response.IsSuccessStatusCode)
                 {
@@ -48,7 +48,7 @@ namespace InicioProyectoClasesCRUD.Controllers
         {
             using (var httpClient = _httpClientFactory.CreateHttpClient())
             {
-                var response = await httpClient.GetAsync("api/Producto/"+idProducto);
+                var response = await httpClient.GetAsync("api/Producto/"+idProducto);//se usa el verbo get porque la solicitus es tipo get
                 // Procesa la respuesta correcta
                 if (response.IsSuccessStatusCode)
                 {
@@ -90,7 +90,7 @@ namespace InicioProyectoClasesCRUD.Controllers
                 var content = new StringContent(jsonProducto, Encoding.UTF8, "application/json");
 
                 // Realiza la solicitud POST
-                var response = await httpClient.PostAsync("api/Producto", content);
+                var response = await httpClient.PostAsync("api/Producto", content);//usa el verbo post porque la solicitud es post
                 // Procesa la respuesta correcta
                 if (response.IsSuccessStatusCode)
                 {
@@ -114,20 +114,37 @@ namespace InicioProyectoClasesCRUD.Controllers
 
 
         // GET: ProductoController/Edit/5
-        public ActionResult Edit(int IdProducto)
+        public ActionResult Edit(int IdProducto)//los métodos que no son de tipo hhttp post sireven para ser usados en partes como los botones
         {
-            Producto producto = Util.Utils.listaProductos.Find(x => x.idProducto==IdProducto);
-            if (producto != null)
-            {
-                return View(producto);
-            }
-            return RedirectToAction("Index");
+            return View();
         }
 
         [HttpPost]
-        public ActionResult Edit(int IdProducto,string Nombre, string Descripcion, int Cantidad)
+        public async Task<IActionResult> Edit(Producto producto)
         {
-            Producto producto = Util.Utils.listaProductos.Find(x => x.idProducto==IdProducto);
+            using (var httpClient = _httpClientFactory.CreateHttpClient())
+            {
+                // Serializar el objeto Producto a formato JSON
+                var jsonProducto = JsonSerializer.Serialize(producto);
+
+                // Crear el contenido de la solicitud con el JSON
+                var content = new StringContent(jsonProducto, Encoding.UTF8, "application/json");
+
+                // Realiza la solicitud POST
+                var response = await httpClient.PutAsync("api/Producto/"+producto.idProducto, content);//usa el verbo put porque la solicitud es post
+                // Procesa la respuesta correcta
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View("Exception", new { message = "Error retrieving data" });
+                }
+            }
+
+
+            /*Producto producto = Util.Utils.listaProductos.Find(x => x.idProducto==IdProducto);
             if (producto != null)
             {
                 producto.nombre = Nombre;
@@ -135,23 +152,38 @@ namespace InicioProyectoClasesCRUD.Controllers
                 producto.descripcion = Descripcion;
                 return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index");*/
         }
 
         // POST: ProductoController/Edit/5
 
 
         // GET: ProductoController/Delete/5
-        public ActionResult Delete(int IdProducto)
+        public async Task<IActionResult> Delete(int idProducto)
         {
-            Producto producto = Util.Utils.listaProductos.Find(x => x.idProducto==IdProducto);
-            if (producto != null) {
-            Util.Utils.listaProductos.Remove(producto);
+            using (var httpClient = _httpClientFactory.CreateHttpClient())
+            {
+                var response = await httpClient.DeleteAsync($"api/Producto/"+idProducto);//Se usa el verbo delete para saber que se hace un request de ese tipo
+                
+                // Procesa la respuesta correcta
+                if (response.IsSuccessStatusCode)
+                {
+                   // Imprime el JSON en la consola
+                    Console.WriteLine(response);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View("Exception", new { message = "Error retrieving data" });
+                }
+                /*Producto producto = Util.Utils.listaProductos.Find(x => x.idProducto==IdProducto);
+                if (producto != null) {
+                Util.Utils.listaProductos.Remove(producto);
+                }
+                return RedirectToAction("Index");*/
             }
-            return RedirectToAction("Index");
-        }
 
-        // POST: ProductoController/Delete/5
-       
+            // POST: ProductoController/Delete/5
+        }
     }
 }
