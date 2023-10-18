@@ -36,7 +36,8 @@ namespace InicioProyectoClasesCRUD.Controllers
                 }
                 else
                 {
-                    return View("Exception", new { message = "Error retrieving data" });
+                    ViewBag.ErrorMessage = "Asegurate de tener conexión con la API";
+                    return View("ErrorView"); ;
                 }
             }
 
@@ -61,7 +62,8 @@ namespace InicioProyectoClasesCRUD.Controllers
                 }
                 else
                 {
-                    return View("Exception", new { message = "Error retrieving data" });
+                    ViewBag.ErrorMessage = "No se pueden mostrar los detalles por el momento";
+                    return View("ErrorView");
                 }
             }
 
@@ -98,7 +100,8 @@ namespace InicioProyectoClasesCRUD.Controllers
                 }
                 else
                 {
-                    return View("Exception", new { message = "Error retrieving data" });
+                    ViewBag.ErrorMessage = "Debe llenar los campos";
+                    return View("ErrorView");
                 }
             }
 
@@ -139,7 +142,8 @@ namespace InicioProyectoClasesCRUD.Controllers
                 }
                 else
                 {
-                    return View("Exception", new { message = "Error retrieving data" });
+                    ViewBag.ErrorMessage = "Debe llenar los campos";
+                    return View("ErrorView");
                 }
             }
 
