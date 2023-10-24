@@ -116,13 +116,30 @@ namespace InicioProyectoClasesCRUD.Controllers
         // POST: ProductoController/Create
 
 
-        // GET: ProductoController/Edit/5
-        public ActionResult Edit(int IdProducto)//los métodos que no son de tipo hhttp post sireven para ser usados en partes como los botones
+        public async Task<IActionResult> Edit(int idProducto)
         {
-            return View();
-        }
+            using (var httpClient = _httpClientFactory.CreateHttpClient())
+            {
+                var response = await httpClient.GetAsync("api/Producto/" + idProducto);//se usa el verbo get porque la solicitus es tipo get
+                // Procesa la respuesta correcta
+                if (response.IsSuccessStatusCode)
+                {
+                    var data = await response.Content.ReadAsStringAsync();
+                    // Imprime el JSON en la consola
+                    Console.WriteLine(data);
+                    var productoEcontrado = JsonSerializer.Deserialize<Producto>(data);
 
-        [HttpPost]
+                    return View(productoEcontrado);
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "No se pueden mostrar los detalles por el momento";
+                    return View("ErrorView");
+                }
+            }
+            }
+
+            [HttpPost]
         public async Task<IActionResult> Edit(Producto producto)
         {
             using (var httpClient = _httpClientFactory.CreateHttpClient())
